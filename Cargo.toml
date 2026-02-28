@@ -2,6 +2,10 @@
 name = "organizer"
 version = "0.1.0"
 edition = "2024"
+authors = ["AntoniaTurcatto <antoniaturcatto29@gmail.com>"]
+description = "A crate to organize a given folder based on given filters."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/AntoniaTurcatto/organizer"
 
 [dependencies]
 chrono = "0.4.44"

@@ -1,7 +1,11 @@
-use ::std::process;
+use std::process;
 use clap::{arg, command};
 use organizer::filters::{DateFilter, Filter};
 
+/// The main entry point for the file organizer CLI application.
+///
+/// This application parses command-line arguments to determine the directory
+/// to organize and the criteria to use (extension or date-based).
 fn main() {
     let (filter, path) = init();
     match organizer::filter_folder(&path, &filter) {
@@ -21,6 +25,23 @@ fn main() {
     }
 }
 
+/// Initializes the application by parsing command-line arguments using `clap`.
+///
+/// # Arguments
+///
+/// * `--folder <PATH>`: The path to the directory to be organized (Required).
+/// * `--time <TIME-FILTER>`: Optional. Defines the date-based organization criteria.
+///    * `d`: Organize by day of modification.
+///    * `m`: Organize by month of modification.
+///    * `y`: Organize by year of modification.
+///    If omitted, files are organized by extension.
+///
+/// # Returns
+///
+/// A tuple containing the chosen [`Filter`] and the path to the folder as a `String`.
+///
+///#Panics
+///Panics if the folder is not informed
 fn init() -> (Filter, String) {
     const DAY: &str = "d";
     const MONTH: &str = "m";

@@ -8,21 +8,65 @@ use chrono::{DateTime, Datelike, Local};
 
 use crate::filters::{DateFilter, Filter};
 
+/// A type alias for a vector of boxed errors that can be returned when
+/// processing multiple files, allowing the process to continue despite individual failures.
 pub type RecoverableErrorVec = Vec<Box<dyn Error>>;
 
+/// Contains types and definitions for filtering and organizing files.
 pub mod filters {
+    /// Defines the criteria used to organize files.
     pub enum Filter {
+        /// Organizes files based on their file extension.
         Ext,
+        /// Organizes files based on their modification date, using a specific precision.
         Date(DateFilter),
     }
 
+    /// Defines the precision level for date-based organization.
     pub enum DateFilter {
+        /// Organizes files into folders named after the day of the month (e.g., "15").
         Day,
+        /// Organizes files into folders named after the month number (e.g., "3").
         Month,
+        /// Organizes files into folders named after the year number (e.g., "2025").
         Year,
     }
 }
 
+/// Scans a directory and organizes its files based on the provided [`Filter`].
+///
+/// Files are moved into subdirectories named after the criteria calculated from the filter.
+///
+/// # Errors
+///
+/// Returns an error if:
+/// * The provided `path` is not a valid directory.
+/// * There are issues reading the directory entries.
+/// * A fatal error occurs during file movement.
+///
+/// If some files fail to move but others succeed, this function returns `Ok(Some(RecoverableErrorVec))`
+/// containing the errors encountered for individual files.
+///
+/// # Examples
+///
+/// ```rust
+/// use organizer::{filter_folder, filters::{Filter, DateFilter}};
+///
+/// # fn main() -> Result<(), Box<dyn std::error::Error>> {
+/// let directory = "./target_folder";
+/// // Create directory for testing
+/// std::fs::create_dir_all(directory)?;
+///
+/// let filter = Filter::Date(DateFilter::Year);
+///
+/// match filter_folder(directory, &filter) {
+///     Ok(None) => println!("All files organized successfully!"),
+///     Ok(Some(errors)) => println!("Organized with {} errors.", errors.len()),
+///     Err(e) => eprintln!("Fatal error: {}", e),
+/// }
+/// # Ok(())
+/// # }
+/// ```
 pub fn filter_folder(
     path: &str,
     filter: &filters::Filter,
@@ -55,6 +99,7 @@ pub fn filter_folder(
     }
 }
 
+/// Processes a single directory entry, applying the filter and moving the file if necessary.
 fn filter_dir_entry(dir_entry: DirEntry, filter: &Filter) -> Result<(), Box<dyn Error>> {
     if !dir_entry.file_type()?.is_file() {
         return Ok(());
@@ -71,6 +116,7 @@ fn filter_dir_entry(dir_entry: DirEntry, filter: &Filter) -> Result<(), Box<dyn 
     Ok(())
 }
 
+/// Calculates the original path and the target path for a given file entry based on the filter.
 fn get_parent_folder_and_target(dir_entry: &DirEntry, filter: &Filter) -> Result<(PathBuf, PathBuf), Box<dyn Error>>{
     let orig_path_binding = dir_entry.path();
 
