@@ -6,6 +6,7 @@ authors = ["AntoniaTurcatto <antoniaturcatto29@gmail.com>"]
 description = "A crate to organize a given folder based on given filters."
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/AntoniaTurcatto/organizer"
+documentation = "https://docs.rs/organizer"
 
 [dependencies]
 chrono = "0.4.44"
