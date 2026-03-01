@@ -1,6 +1,6 @@
 [package]
 name = "organizer"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 authors = ["AntoniaTurcatto <antoniaturcatto29@gmail.com>"]
 description = "A crate to organize a given folder based on given filters."
