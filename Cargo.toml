@@ -1,12 +1,16 @@
 [package]
 name = "organizer"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 authors = ["AntoniaTurcatto <antoniaturcatto29@gmail.com>"]
 description = "A crate to organize a given folder based on given filters."
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/AntoniaTurcatto/organizer"
-documentation = "https://docs.rs/organizer"
+documentation = "https://docs.rs/crate/organizer"
+
+[lib]
+name = "organizer"
+path = "src/lib.rs"
 
 [dependencies]
 chrono = "0.4.44"
